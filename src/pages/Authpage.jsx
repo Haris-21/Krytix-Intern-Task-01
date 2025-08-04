@@ -94,7 +94,7 @@ const Authpage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center bg-primary px-4 h-screen">
-      <div className="bg-secondary p-4 rounded-3xl shadow-2xl shadow-zinc-800 w-[70%] grid grid-cols-2 items-center gap-4 ">
+      <div className="bg-secondary p-4 rounded-3xl shadow-2xl shadow-zinc-800 xl:w-[70%] lg:w-[90%] grid grid-cols-2 items-center gap-4 ">
         <div className="w-full relative "> 
             <img src={authpic} alt="Logo" className="w-full h-full rounded-3xl" />
             <h1 className="absolute top-2 left-4 text-3xl font-bold font-sans text-white">SAW</h1>
@@ -106,9 +106,9 @@ const Authpage = () => {
             </div>
         </div>
 
-            <div className="p-10 h-[70%] flex flex-col justify-between">
+            <div className="xl:p-10 lg:p-4 h-[70%] flex flex-col justify-between">
               <div className="flex justify-between items-center mb-5">
-                <h1 className="text-white text-4xl font-roboto text-center">
+                <h1 className="text-white xl:text-4xl lg:text-3xl font-roboto ">
                   {/* {activeForm.replace("-", " ")} */}
                   {activeForm === "login" ? "Login" : "Create account" | activeForm === "register" ? "Create an account" : activeForm === "forgot" ? "Forgot Password" : "Change Password"}
                   </h1>
