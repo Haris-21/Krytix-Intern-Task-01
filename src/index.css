@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+
+.bg-primary {
+  background-color: #585268;
+}
+
+.bg-secondary {
+  background-color: #2C2638;
+}
+
+.bg-third{
+  background-color: #6D54B5;
+}
+
+.text-third{
+  color: #6D54B5;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
