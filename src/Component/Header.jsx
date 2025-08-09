@@ -11,19 +11,12 @@ const Header = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("email"); 
-    navigate("/"); // Back to login page
+    navigate("/"); 
   };
 
 
-
-
-
-
-
-
-
     return (
-        <header className="bg-primary p-4 w-full flex items-center justify-between">
+        <header className="bg-primary pr-4 pb-4 pt-4 xs:pl-4 2xs:pl-4 3xs:pl-4 xl:pl-0 lg:pl-0 md:pl-0 sm:pl-0 w-full flex items-center justify-between">
             <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl shadow-lg w-full flex items-center justify-between">
                         <h1 className="text-3xl font-bold text-white">SAW</h1>
                         <div className="flex items-center gap-4">

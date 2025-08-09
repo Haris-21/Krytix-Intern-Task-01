@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 const SideBar = () => {
   return (
-    <aside className="bg-primary h-screen w-[25%] p-4">
-      <div className="bg-secondary h-full p-8 rounded-2xl shadow text-center w-full">
+    <aside className="bg-primary h-screen p-4">
+      <div className="bg-secondary h-full xl:p-8 lg:p-8 md:p-4 sm:p-4 rounded-2xl shadow text-center w-full">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-white">SAW</h1>
           <button className="text-white p-2 rounded hover:bg-white/10"><FaArrowLeft /></button>
