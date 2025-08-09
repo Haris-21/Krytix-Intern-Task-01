@@ -25,7 +25,7 @@ const Dashboard = () => {
           <h1 className="text-3xl font-bold text-white">SAW</h1>
           <div className="flex items-center gap-4">
           <span className="text-zinc-700 text-3xl"><FaUserCircle/></span>
-          <Link to='/'>
+          <Link to='/auth'>
             <button className="bg-violet-500 text-white px-4 py-2 rounded font-roboto cursor-pointer transition-all duration-200 hover:bg-violet-600">Log In</button>
           </Link>
           </div>
