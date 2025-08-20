@@ -46,19 +46,28 @@ export const registerUser = async (username, email, password) => {
   }
 };
 
-export const getUserDetails = async () => {
-  try {
-    const res = await fetch("https://os-project-server.vercel.app/auth");
+// Send OTP to email
+export const sendOtp = async (email) => {
+  const res = await fetch("https://os-project-server.vercel.app/auth/send-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
 
-    const data = await res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to send OTP");
+  return data;
+};
 
-    if (!res.ok) {
-      throw new Error(data.message || "Failed to fetch user data");
-    }
+// Reset password with OTP
+export const resetPassword = async (email, otp, newPassword) => {
+  const res = await fetch("https://os-project-server.vercel.app/auth/reset-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, otp, newPassword }),
+  });
 
-    return data;
-  } catch (error) {
-    console.error("User Info Error:", error.message);
-    throw error;
-  }
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to reset password");
+  return data;
 };

@@ -8,7 +8,7 @@ import { FaApple } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
-import { loginUser, registerUser } from "../api/auth"; 
+import { loginUser, registerUser, resetPassword, sendOtp } from "../api/auth"; 
 import { decodeJWT } from "../utils/jwt"; 
 
 const Authpage = () => {
@@ -16,11 +16,12 @@ const Authpage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
+  // const [currentPassword, setCurrentPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  // const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [username, setUsername] = useState("");
+  const [otp, setOtp] = useState("");
 
   const navigate = useNavigate();
 
@@ -57,20 +58,24 @@ const Authpage = () => {
             alert(error.message || "Login failed");
           }
     } else if (activeForm === "forgot") {
-      alert("Password reset link sent to your email.");
-      setEmail("");
+      try {
+      const res = await sendOtp(email);
+      alert(res.message || "OTP sent to your email!");
+      setActiveForm("change"); // switch to change password form
+        } catch (error) {
+          alert(error.message || "Failed to send OTP");
+        }
     } else if (activeForm === "change") {
-      const savedUser = JSON.parse(localStorage.getItem("authUser"));
-      if (savedUser && savedUser.password === currentPassword) {
-        const updatedUser = { ...savedUser, password: newPassword };
-        localStorage.setItem("authUser", JSON.stringify(updatedUser));
-        alert("Password changed successfully.");
-        setCurrentPassword("");
-        setNewPassword("");
-        setActiveForm("login");
-      } else {
-        alert("Current password is incorrect.");
-      }
+      try {
+      const res = await resetPassword(email, otp, newPassword);
+      alert(res.message || "Password reset successful!");
+          setOtp("");
+          setNewPassword("");
+          setEmail("");
+          setActiveForm("login");
+        } catch (error) {
+          alert(error.message || "Password reset failed");
+        }
     } else {
       alert("Form submitted");
     }
@@ -157,18 +162,57 @@ const Authpage = () => {
         );
       case "forgot":
         return (
-          <form onSubmit={handleDummySubmit} className="space-y-4 mb-60">
-            <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 pl-4 bg-white/5 hover:bg-white/10 rounded focus:outline focus:outline-[#6D54B5] transition-all duration-300 text-zinc-400" required />
-            <button type="submit" className="w-full bg-violet-500 text-white p-2 rounded font-roboto cursor-pointer transition-all duration-200 hover:bg-violet-600">Reset Password</button>
-          </form>
+          // <form onSubmit={handleDummySubmit} className="space-y-4 mb-60">
+          //   <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 pl-4 bg-white/5 hover:bg-white/10 rounded focus:outline focus:outline-[#6D54B5] transition-all duration-300 text-zinc-400" required />
+          //   <button type="submit" className="w-full bg-violet-500 text-white p-2 rounded font-roboto cursor-pointer transition-all duration-200 hover:bg-violet-600">Reset Password</button>
+          // </form>
+           <form onSubmit={handleDummySubmit} className="space-y-4 mb-60">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-2 pl-4 bg-white/5 hover:bg-white/10 rounded focus:outline focus:outline-[#6D54B5] transition-all duration-300 text-zinc-400"
+                required
+              />
+              <button
+                type="submit"
+                className="w-full bg-violet-500 text-white p-2 rounded font-sans cursor-pointer transition-all duration-200 hover:bg-violet-600"
+              >
+                Send OTP
+              </button>
+            </form>
         );
       case "change":
         return (
+          // <form onSubmit={handleDummySubmit} className="space-y-4 mb-52">
+          //   {renderPasswordInput(currentPassword, setCurrentPassword, showCurrentPassword, setShowCurrentPassword, "Current Password")}
+          //   {renderPasswordInput(newPassword, setNewPassword, showNewPassword, setShowNewPassword, "New Password")}
+          //   <button type="submit" className="w-full bg-violet-500 text-white p-2 rounded font-roboto cursor-pointer transition-all duration-200 hover:bg-violet-600">Change Password</button>
+          // </form>
           <form onSubmit={handleDummySubmit} className="space-y-4 mb-52">
-            {renderPasswordInput(currentPassword, setCurrentPassword, showCurrentPassword, setShowCurrentPassword, "Current Password")}
-            {renderPasswordInput(newPassword, setNewPassword, showNewPassword, setShowNewPassword, "New Password")}
-            <button type="submit" className="w-full bg-violet-500 text-white p-2 rounded font-roboto cursor-pointer transition-all duration-200 hover:bg-violet-600">Change Password</button>
-          </form>
+          <input
+            type="text"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            className="w-full p-2 pl-4 bg-white/5 hover:bg-white/10 rounded focus:outline-2 focus:outline-[#6D54B5] transition-all duration-300 text-zinc-400"
+            required
+          />
+          {renderPasswordInput(
+            newPassword,
+            setNewPassword,
+            showNewPassword,
+            setShowNewPassword,
+            "New Password"
+          )}
+          <button
+            type="submit"
+            className="w-full bg-violet-500 text-white p-2 rounded font-sans cursor-pointer transition-all duration-200 hover:bg-violet-600"
+          >
+            Reset Password
+          </button>
+        </form>
         );
       default:
         return null;
